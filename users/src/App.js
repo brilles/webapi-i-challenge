@@ -22,10 +22,27 @@ class App extends Component {
         console.log(err);
       });
   }
+
+  componentDidUpdate() {
+    this.componentDidMount();
+  }
+
+  deleteUser = (e, id) => {
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:4000/api/users/${id}`)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
       <div className="App">
-        <UserList users={this.state.users} />
+        <UserList users={this.state.users} deleteUser={this.deleteUser} />
       </div>
     );
   }

@@ -7,6 +7,7 @@ const UserList = props => {
       {props.users.map(user => {
         return (
           <div key={user.id}>
+            <span onClick={e => props.deleteUser(e, user.id)}>X</span>
             <h2>{user.name}</h2>
             <p>{user.bio}</p>
           </div>
