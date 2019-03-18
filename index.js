@@ -13,9 +13,7 @@ server.post("/api/users", (req, res) => {
       })
       .catch(error => {
         res.status(500).json({
-          message: {
-            error: "There was an error while saving the user to the database"
-          }
+          error: "There was an error while saving the user to the database"
         });
       });
   } else {
@@ -73,9 +71,30 @@ server.delete("/api/users/:id", (req, res) => {
     });
 });
 
-// server.put('/', (req, res) => {
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
 
-// });
+  db.update(id, changes)
+    .then(updated => {
+      if (updated) {
+        res.status(200).json(changes);
+      } else if (!changes.hasOwnProperty("name" || "bio")) {
+        res
+          .status(400)
+          .json({ errorMessage: "Please provide name and bio for the user." });
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(error => {
+      res
+        .status(500)
+        .json({ error: "The user information could not be modified." });
+    });
+});
 
 server.listen(4000, () => {
   console.log("\n ** API up and running on port 4k  **");
