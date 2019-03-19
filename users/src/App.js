@@ -12,7 +12,7 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  fetchUsers() {
     axios
       .get("http://localhost:4000/api/users")
       .then(res => {
@@ -29,7 +29,7 @@ class App extends Component {
     axios
       .delete(`http://localhost:4000/api/users/${id}`)
       .then(res => {
-        console.log(res);
+        this.fetchUsers();
       })
       .catch(err => {
         console.log(err);
@@ -44,7 +44,9 @@ class App extends Component {
     axios
     .post("http://localhost:4000/api/users", newUser)
     .then(res => {
-        console.log(res)
+        // console.log(res)
+        // this.setState({ users: [...this.state.users, res.data]})
+        this.fetchUsers();
     })
         .catch(err => {
         console.log(err);
@@ -60,13 +62,17 @@ class App extends Component {
     axios
       .put(`http://localhost:4000/api/users/${id}`, updatedUser)
       .then(res => {
-        console.log(res);
+        this.fetchUsers();
       })
       .catch(err => {
         console.log(err);
       });
 
   };
+
+  componentDidMount() {
+    this.fetchUsers();
+  }  
 
   render() {
     return (

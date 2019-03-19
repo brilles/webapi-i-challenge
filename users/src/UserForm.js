@@ -25,7 +25,7 @@ export default class UserForm extends Component {
   render() {
     return (
       <div className="add-user-form">
-        <h2>Add User:</h2>
+        <h2>Add or Update a User:</h2>
         <form onSubmit={this.state.id === "" ? this.addUser : this.updateUser}>
           <input
             type="text"
