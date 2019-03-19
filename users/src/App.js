@@ -1,34 +1,53 @@
 // import React, { Component } from "react";
-// import axios from "axios";
+import axios from "axios";
 // import "./App.css";
 // import UserList from "./UserList";
 // import UserForm from "./UserForm";
 
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
-function UserList({user, deleteUser}) {
-  return(
-    <p>hello from the userList</p>
-  )
+function UserList({ users, deleteUser }) {
+  return (
+    <div className="users-list">
+      <h1>Users: </h1>
+      {users.map(user => {
+        return (
+          <div key={user.id}>
+            <span onClick={() => deleteUser(user.id)}>X</span>
+            <h2>{user.name}</h2>
+            <p>{user.bio}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function UserForm({ addUser, updateUser }) {
-  return (
-    <p>hello from the userform</p>
-  )
+  return <p>hello from the userform</p>;
 }
 
 export default function App() {
-  const [users] = useState({
-    users: ""
-  })
+  const [users, setUsers] = useState([]);
 
-  return(
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/users")
+      .then(res => {
+        setUsers(res.data);
+      })
+      .catch(err => {
+        setUsers({ error: err });
+        console.log(err);
+      });
+  }, []);
+
+  return (
     <div className="app">
-    <UserForm />
-    <UserList />
+      <UserForm />
+      <UserList users={users} />
     </div>
-  )
+  );
 }
 
 // class App extends Component {
@@ -78,7 +97,7 @@ export default function App() {
 //         .catch(err => {
 //         console.log(err);
 //       });
-   
+
 //   };
 
 //   updateUser = (name, bio, id) => {
@@ -99,7 +118,7 @@ export default function App() {
 
 //   componentDidMount() {
 //     this.fetchUsers();
-//   }  
+//   }
 
 //   render() {
 //     return (
