@@ -24,7 +24,51 @@ function UserList({ users, deleteUser }) {
 }
 
 function UserForm({ addUser, updateUser }) {
-  return <p>hello from the userform</p>;
+  const [user, setUser] = useState("");
+  const [id, setId] = useState("");
+  const [bio, setBio] = useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    // user.id === "" ? addUser(user) : updateUser(user);
+    addUser({
+      "name": user, 
+      "bio": bio
+    });
+    setUser("");
+    setBio("");
+    setId("");
+  };
+
+  return (
+    <div className="add-user-form">
+      <h2>Add or Update a User:</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Username"
+          value={user}
+          onChange={e => setUser(e.target.value)}
+        />
+        <input
+          type="text"
+          name="bio"
+          placeholder="Bio"
+          value={bio}
+          onChange={e => setBio(e.target.value)}
+        />
+        <input
+          type="number"
+          name="id"
+          placeholder="id of user to edit"
+          value={id}
+          onChange={e => setId(e.target.value)}
+        />
+        <button>{"Add user"}</button>
+      </form>
+    </div>
+  );
 }
 
 export default function App() {
@@ -42,9 +86,20 @@ export default function App() {
       });
   }, []);
 
+  const addUser = user => {
+    axios
+      .post("http://localhost:4000/api/users", user)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="app">
-      <UserForm />
+      <UserForm addUser={addUser} />
       <UserList users={users} />
     </div>
   );
