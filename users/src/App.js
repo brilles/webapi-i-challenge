@@ -24,10 +24,6 @@ class App extends Component {
       });
   }
 
-  componentDidUpdate() {
-    this.componentDidMount();
-  }
-
   deleteUser = (e, id) => {
     e.preventDefault();
     axios
@@ -40,8 +36,7 @@ class App extends Component {
       });
   };
 
-  handleSubmit = (e, name, bio) => {
-    e.preventDefault();
+  addUser = (name, bio) => {
     const newUser = {
       "name": name,
       "bio": bio
@@ -57,10 +52,26 @@ class App extends Component {
    
   };
 
+  updateUser = (name, bio, id) => {
+    const updatedUser = {
+      "name": name,
+      "bio": bio
+    };
+    axios
+      .put(`http://localhost:4000/api/users/${id}`, updatedUser)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+  };
+
   render() {
     return (
       <div className="App">
-        <UserForm handleSubmit={this.handleSubmit} />
+        <UserForm addUser={this.addUser} updateUser={this.updateUser}/>
         <UserList users={this.state.users} deleteUser={this.deleteUser} />
       </div>
     );

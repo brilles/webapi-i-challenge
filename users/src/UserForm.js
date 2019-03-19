@@ -3,22 +3,30 @@ import React, { Component } from "react";
 export default class UserForm extends Component {
   state = {
     name: "",
-    bio: ""
+    bio: "",
+    id: ""
   };
 
   handleChanges = e => {
+
     this.setState({ [e.target.name]: e.target.value });
   };
 
   addUser = e => {
-    this.props.handleSubmit(e, this.state.name, this.state.bio);
+      e.preventDefault();
+    this.props.addUser( this.state.name, this.state.bio);
+  };
+
+  updateUser = e => {
+      e.preventDefault();
+      this.props.updateUser( this.state.name, this.state.bio, parseInt(this.state.id, 10))
   };
 
   render() {
     return (
       <div className="add-user-form">
         <h2>Add User:</h2>
-        <form onSubmit={this.addUser}>
+        <form onSubmit={this.state.id === "" ? this.addUser : this.updateUser}>
           <input
             type="text"
             name="name"
@@ -33,7 +41,14 @@ export default class UserForm extends Component {
             value={this.state.bio}
             onChange={this.handleChanges}
           />
-          <button>Add User</button>
+          <input
+            type="number"
+            name="id"
+            placeholder="id of user to edit"
+            value={this.state.id}
+            onChange={this.handleChanges}
+          />
+          <button>{this.state.id === "" || "" ? "Add user" : "Update user"}</button>
         </form>
       </div>
     );
